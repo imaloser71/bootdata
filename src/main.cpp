@@ -1,15 +1,28 @@
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
+#include <sstream>
 #include <string.h>
 #include <string>
 #include <algorithm>
 #include <vector>
 #include <map>
 
+#include <tchar.h>
+#include <conio.h>
+
 #pragma warning(disable: 4996)
 
 HANDLE hConsole;
+bool samestring(char* a, const char* b) {
+    if (strlen(a) != strlen(b)) return false;
+    for (int i = 0; i < strlen(a); i++) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 std::string intToHex(unsigned int number) {
     std::stringstream stream;
     stream << std::hex << number;
@@ -22,14 +35,14 @@ void visualizeBuffer(char* buffer) {
     SetConsoleCP(437);
     SetConsoleTextAttribute(hConsole, 8);
     _tprintf(TEXT("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="));
-    for (int i = 0; i < 512; i++){
+    for (int i = 0; i < 512; i++) {
         char value = (buffer)[i];
-        if(i%0x20==0){
+        if (i % 0x20 == 0) {
             _tprintf(L"\n");
             SetConsoleTextAttribute(hConsole, 14);
             std::string hex = intToHex(i);
             std::transform(hex.begin(), hex.end(), hex.begin(), ::toupper);
-            std::cout << " 0x" << std::string(3-hex.length(),'0') << hex << ": ";
+            std::cout << " 0x" << std::string(3 - hex.length(), '0') << hex << ": ";
         }
         if ((unsigned char)value < 0x20) {
             SetConsoleTextAttribute(hConsole, 12);
@@ -64,7 +77,7 @@ int main(int argc, char** argv) {
         else if (samestring(argv[1], "export")) {
             paramFlag = 1;
         }
-        else if (samestring(argv[1],"import")) {
+        else if (samestring(argv[1], "import")) {
             paramFlag = 2;
         }
         else {
@@ -79,6 +92,7 @@ int main(int argc, char** argv) {
     DWORD dwBytesToRead = 512;
     DWORD dwBytesRead = 0;
     BOOL bErrorFlag = FALSE;
+    HANDLE h;
 
 
     if (paramFlag == 2) {
@@ -143,15 +157,16 @@ int main(int argc, char** argv) {
         SetConsoleTextAttribute(hConsole, 15);
         _tprintf(TEXT("ANSI:\n"));
         visualizeBuffer(((DataBuffer)));
-		if(paramFlag == 2){
-			_tprintf(TEXT("If the result above is not equivelant to your boot file, it is possible it was not imported correctly, in such case please prepare for unexpected results.\n"), dwBytesRead);
-		}else{
-			_tprintf(TEXT("Success! %d bytes read\n"), dwBytesRead);
-		}
+        if (paramFlag == 2) {
+            _tprintf(TEXT("If the result above is not equivelant to your boot file, it is possible it was not imported correctly, in such case please prepare for unexpected results.\n"), dwBytesRead);
+        }
+        else {
+            _tprintf(TEXT("Success! %d bytes read\n"), dwBytesRead);
+        }
     }
     else {
         SetConsoleTextAttribute(hConsole, 12);
-        _tprintf(TEXT("ReadFile returned 0.\nGetLastError returned %d.\n"),GetLastError());
+        _tprintf(TEXT("ReadFile returned 0.\nGetLastError returned %d.\n"), GetLastError());
     }
     CloseHandle(h);
     SetConsoleTextAttribute(hConsole, 15);
