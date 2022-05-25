@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include <Windows.h>
 #include <string.h>
 #include <string>
