@@ -1,7 +1,7 @@
 # bootdata
 (Crappy) Open-Source recreation of Endermanch's bootdata utility. There's no hex view <s>nor export/import options</s> yet.
 
-(Made in 5 hours, 50% of which was me troubleshooting a dumb mistake i didn't see or windows cmd being windows cmd)
+Made for... idk if you want to copy the files for your skidded "Xx_H4xx0r1337_R4ns0mw4r3_xX ちんちんくださいLocker", it's not like the code is good anyway since i made it as a warm up XD
 
 ## Parameter Documentation
 ```
